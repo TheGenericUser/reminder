@@ -1,0 +1,149 @@
+if __name__ == '__main__':
+    import os
+
+    os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "beans"
+    import pygame
+    import time
+    import datetime
+    from pygame import mixer
+    import random
+
+
+    def getdate():
+        return datetime.datetime.now()
+
+
+print("Set up!")
+
+
+def reminder_for_exercise():
+    global reminder_exercise, exercise_hms
+    try:
+        reminder_exercise = eval(input("Set the reminder for exercise (in seconds):"))
+    except Exception as e:
+        print("Write correctly. Only use numbers!")
+        reminder_for_exercise()
+    minutes_exercise, seconds_exercise = divmod(reminder_exercise, 60)
+    hours_exercise, minutes_exercise = divmod(minutes_exercise, 60)
+    exercise_hms = f"{hours_exercise} hour,{minutes_exercise} minutes,{seconds_exercise} seconds"
+
+    if reminder_exercise > 28800:
+        you_sure = input("Are you sure about this abysmal setting? y(yes)/n(no):")
+        if you_sure == "y":
+            you_sure2 = input("You've got to be kidding me! I won't accept these settings! y(yes)/n(no):")
+            if you_sure2 == "y":
+                you_sure3 = input("I gotcha, but seriously though. Please be sure! y(yes)/n(no):")
+                if you_sure3 == "y":
+                    you_sure4 = input(f"You're probably questioning this weird interface, "
+                                      "while I'm questioning your decision of using this "
+                                      "damn thing if you are going to do exercise every"
+                                      f" {exercise_hms}. Consider yourself 80! y(yes)/n(no):")
+                    if you_sure4 == "y":
+                        print("no")
+                        reminder_for_exercise()
+                    elif you_sure4 == "n":
+                        reminder_for_exercise()
+                    else:
+                        print("Type correctly!")
+                        reminder_for_exercise()
+                elif you_sure3 == "n":
+                    reminder_for_exercise()
+                else:
+                    print("Type correctly!")
+                    reminder_for_exercise()
+            elif you_sure2 == "n":
+                reminder_for_exercise()
+            else:
+                print("Type correctly!")
+                reminder_for_exercise()
+        elif you_sure == "n":
+            reminder_for_exercise()
+        else:
+            print("Type correctly!")
+            reminder_for_exercise()
+
+    elif reminder_exercise < 1200:
+        you_sure = input("Are you sure about this lowly setting? y(yes)/n(no):")
+        if you_sure == "y":
+            you_sure2 = input("You are kidding me! Are you really really really really sure? y(yes)/n(no):")
+            if you_sure2 == "y":
+                you_sure3 = input("Why...just why....just...why... y(yes)/n(no):")
+                if you_sure3 == "y":
+                    you_sure4 = input(f"You're probably questioning this weird interface, "
+                                      "while I'm questioning your decision of using this "
+                                      "damn thing if you are going to drink exercise every"
+                                      f" {exercise_hms}. Might as well open a gym. At least you'll earn something!"
+                                      f"y(yes)/n(no):")
+                    if you_sure4 == "y":
+                        print("no")
+                        reminder_for_exercise()
+                    elif you_sure4 == "n":
+                        reminder_for_exercise()
+                    else:
+                        print("Type correctly!")
+                        reminder_for_exercise()
+                elif you_sure3 == "n":
+                    reminder_for_exercise()
+                else:
+                    print("Type correctly!")
+                    reminder_for_exercise()
+            elif you_sure2 == "n":
+                reminder_for_exercise()
+            else:
+                print("Type correctly!")
+                reminder_for_exercise()
+        elif you_sure == "n":
+            reminder_for_exercise()
+        else:
+            print("Type correctly!")
+            reminder_for_exercise()
+    elif 600 < reminder_exercise < 14400:
+        print(f"Okay! The exercise timer is set up every {exercise_hms}")
+
+
+with open("Exercise Log", "w") as w:
+    pass
+
+
+def exercise1():
+    pygame.mixer.init()
+    music_play = random.randint(1,2)
+    if music_play == 1:
+        mixer.music.load("bounce.wav")
+    elif music_play == 2:
+        mixer.music.load("i_against_all.wav")
+    mixer.music.play(-1)
+    print("Ding! Ding! Ding! Do exercise!!")
+
+    def exercise_exercise():
+        global exercise
+        exercise = input("Have you completed your exercise? y(yes)/n(no)")
+        exercise = exercise.lower()
+
+    def exercise_exercise_if_else():
+        if exercise == "y" or exercise == "yes":
+            pygame.mixer.music.pause()
+            print(f"Good! Next reminder in {exercise_hms}.")
+            with open("Exercise Log", "a") as wl:
+                wl.write("Did exercise on and at " + str([str(getdate())]) + "\n")
+        elif exercise == "n" or exercise == "no":
+            print("Nothing would happen! Start exercising!")
+            exercise_exercise()
+            exercise_exercise_if_else()
+        else:
+            print("Wrote incorrectly!")
+            exercise_exercise()
+            exercise_exercise_if_else()
+
+    exercise_exercise()
+    exercise_exercise_if_else()
+
+
+def reminder_exercise_loop():
+    while True:
+        exercise1()
+        time.sleep(reminder_exercise)
+
+
+reminder_for_exercise()
+reminder_exercise_loop()
