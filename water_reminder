@@ -98,8 +98,8 @@ def reminder_for_water():
         print(f"Okay! The water timer is set up every {water_hms}")
 
 
-# with open("Water Log", "w") as w:
-#     pass
+with open("Water Log", "w") as w:
+    pass
 
 
 def water():
