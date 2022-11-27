@@ -1,0 +1,168 @@
+import os
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "beans"
+import pygame
+import time
+import datetime
+from pygame import mixer
+
+
+def getdate():
+    return datetime.datetime.now()
+
+
+print("Set up!")
+
+
+def reminder_for_water():
+    global reminder_water, water_hms
+    try:
+        reminder_water = eval(input("Set the reminder for drinking (in seconds):"))
+    except Exception as e:
+        print("Write correctly. Only use numbers!")
+        reminder_for_water()
+    minutes_water, seconds_water = divmod(reminder_water, 60)
+    hours_water, minutes_water = divmod(minutes_water, 60)
+    water_hms = f"{hours_water} hour,{minutes_water} minutes,{seconds_water} seconds"
+
+    if reminder_water > 14400:
+        you_sure = input("Are you sure about this abysmal setting? y(yes)/n(no):")
+        if you_sure == "y":
+            you_sure2 = input("You've got to be kidding me! Are you really sure? y(yes)/n(no):")
+            if you_sure2 == "y":
+                you_sure3 = input("I gotcha, but seriously though. Are you 100% sure? y(yes)/n(no):")
+                if you_sure3 == "y":
+                    you_sure4 = input(f"You're probably questioning this weird interface, "
+                                      "while I'm questioning your decision of using this "
+                                      "damn thing if you are going to drink water every"
+                                      f" {water_hms}. y(yes)/n(no):")
+                    if you_sure4 == "y":
+                        print("no")
+                        reminder_for_water()
+                    elif you_sure4 == "n":
+                        reminder_for_water()
+                    else:
+                        print("Type correctly!")
+                        reminder_for_water()
+                elif you_sure3 == "n":
+                    reminder_for_water()
+                else:
+                    print("Type correctly!")
+                    reminder_for_water()
+            elif you_sure2 == "n":
+                reminder_for_water()
+            else:
+                print("Type correctly!")
+                reminder_for_water()
+        elif you_sure == "n":
+            reminder_for_water()
+        else:
+            print("Type correctly!")
+            reminder_for_water()
+
+    elif reminder_water < 1200:
+        you_sure = input("Are you sure about this lowly setting? y(yes)/n(no):")
+        if you_sure == "y":
+            you_sure2 = input("You are kidding me! Are you really really really really sure? y(yes)/n(no):")
+            if you_sure2 == "y":
+                you_sure3 = input("Why... y(yes)/n(no):")
+                if you_sure3 == "y":
+                    you_sure4 = input(f"You're probably questioning this weird interface, "
+                                      "while I'm questioning your decision of using this "
+                                      "damn thing if you are just going to drink water every"
+                                      f" {water_hms}. Might as well drink it every second!!!! y(yes)/n(no):")
+                    if you_sure4 == "y":
+                        print("no")
+                        reminder_for_water()
+                    elif you_sure4 == "n":
+                        reminder_for_water()
+                    else:
+                        print("Type correctly!")
+                        reminder_for_water()
+                elif you_sure3 == "n":
+                    reminder_for_water()
+                else:
+                    print("Type correctly!")
+                    reminder_for_water()
+            elif you_sure2 == "n":
+                reminder_for_water()
+            else:
+                print("Type correctly!")
+                reminder_for_water()
+        elif you_sure == "n":
+            reminder_for_water()
+        else:
+            print("Type correctly!")
+            reminder_for_water()
+    elif 600 < reminder_water < 14400:
+        print(f"Okay! The water timer is set up every {water_hms}")
+
+
+# with open("Water Log", "w") as w:
+#     pass
+
+
+def water():
+    pygame.mixer.init()
+    mixer.music.load("watr-fluid.wav")
+    mixer.music.play(-1)
+    print("Ding! Ding! Ding! Drink water!!")
+
+    def drank_water():
+        global drank
+        drank = input("Have you drank water? y(yes)/n(no)")
+        drank = drank.lower()
+
+        def exit():
+            exit_str = input("Do you want to exit? y/n")
+            if exit_str == "y" or exit_str == "yes":
+                you_sure = input("Are you sure?")
+                if you_sure == "y" or you_sure == "yes":
+                    pass
+                elif you_sure == "n" or you_sure == "no":
+                    print("Alright!")
+                    exit()
+                else:
+                    print("You did something wrong!")
+                    exit()
+                with open("Water Log", "a") as wl:
+                    wl.write("Drank water on and at " + str([str(getdate())]) + "\n")
+                pygame.mixer.music.pause()
+                reminder_for_water()
+                reminder_water_loop()
+            elif exit_str == "n" or exit_str == "no":
+                print("The code will continue!")
+                pass
+            else:
+                print("Type correctly!")
+                exit()
+
+        exit()
+
+    def drank_if_else():
+        if drank == "y" or drank == "yes":
+            pygame.mixer.music.pause()
+            print(f"Good! Next reminder in {water_hms}.")
+            with open("Water Log", "a") as wl:
+                wl.write("Drank water on and at " + str([str(getdate())]) + "\n")
+        elif drank == "n" or drank == "no":
+            print("Nothing would happen! Drink water!")
+            drank_water()
+            drank_if_else()
+        else:
+            print("Wrote incorrectly!")
+            drank_water()
+            drank_if_else()
+
+    drank_water()
+    drank_if_else()
+
+
+def reminder_water_loop():
+    while True:
+        water()
+        time.sleep(reminder_water)
+
+
+reminder_for_water()
+reminder_water_loop()
